@@ -20,9 +20,9 @@ public class UsuarioDAO extends DAO<Usuario>{
 		}
 	}
 	
-	public Usuario readUser(String name, String pass){
+	public Usuario getUsuarioByLogin(String login, String senha){
 		try{
-			Query q = manager.createQuery("select u from Usuario u where u.name = '"+name+"' AND u.password = '"+pass+"' ");
+			Query q = manager.createQuery("select u from Usuario u where u.login = '"+login+"' AND u.senha = '"+senha+"' ");
 			Usuario u = (Usuario) q.getSingleResult();
 			return u;
 		}catch(NoResultException e){

@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+
+body {
+
+  font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+  font-size: 14px;
+}
+
+#calendar {
+  max-width: 800px;
+  margin: 0 auto;
+}

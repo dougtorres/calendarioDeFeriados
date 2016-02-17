@@ -2,168 +2,108 @@
 	pageEncoding="ISO-8859-1"%>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<meta name="description" content="">
-<meta name="author" content="">
+<title>Calendário</title>
 
-<title>Navbar Template for Bootstrap</title>
+<meta charset='utf-8' />
+<link href='http://fullcalendar.io/js/fullcalendar-2.6.0/fullcalendar.css' rel='stylesheet' />
+<link href='http://fullcalendar.io/js/fullcalendar-2.6.0/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js'></script>
+<script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.6.0/fullcalendar.js'></script>
 
-<!-- Bootstrap core CSS -->
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 <!-- Custom styles for this template -->
 <link href="css/navbar.css" rel="stylesheet">
 
-<link href='fullcalendar/fullcalendar.css' rel='stylesheet' />
-<link href='fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
-<script src='fullcalendar/lib/jquery.min.js'></script>
-	<!--FullCalendar-->
-	<script src='fullcalendar/fullcalendar.min.js'></script>
+<!-- Custom styles for this template -->
+<link href="css/styles.css" rel="stylesheet">
+
 
 <script type="text/javascript">
-
-/*
-	jQuery document ready
-*/
-
-$(document).ready(function()
-{
-	/*
-		date store today date.
-		d store today date.
-		m store current month.
-		y store current year.
-	*/
-	var date = new Date();
-	var d = date.getDate();
-	var m = date.getMonth();
-	var y = date.getFullYear();
-	
-	/*
-		Initialize fullCalendar and store into variable.
-		Why in variable?
-		Because doing so we can use it inside other function.
-		In order to modify its option later.
-	*/
-	
-	var calendar = $('#calendar').fullCalendar(
-	{
-		/*
-			header option will define our calendar header.
-			left define what will be at left position in calendar
-			center define what will be at center position in calendar
-			right define what will be at right position in calendar
-		*/
-		header:
-		{
-			left: 'prev,next today',
-			center: 'title',
-			right: 'month,agendaWeek,agendaDay'
-		},
-		/*
-			defaultView option used to define which view to show by default,
-			for example we have used agendaWeek.
-		*/
-		defaultView: 'agendaWeek',
-		/*
-			selectable:true will enable user to select datetime slot
-			selectHelper will add helpers for selectable.
-		*/
-		selectable: true,
-		selectHelper: true,
-		/*
-			when user select timeslot this option code will execute.
-			It has three arguments. Start,end and allDay.
-			Start means starting time of event.
-			End means ending time of event.
-			allDay means if events is for entire day or not.
-		*/
-		select: function(start, end, allDay)
-		{
-			/*
-				after selection user will be promted for enter title for event.
-			*/
-			var title = prompt('Event Title:');
-			/*
-				if title is enterd calendar will add title and event into fullCalendar.
-			*/
-			if (title)
-			{
-				calendar.fullCalendar('renderEvent',
-					{
-						title: title,
-						start: start,
-						end: end,
-						allDay: allDay
-					},
-					true // make the event "stick"
-				);
-			}
-			calendar.fullCalendar('unselect');
-		},
-		/*
-			editable: true allow user to edit events.
-		*/
-		editable: true,
-		/*
-			events is the main option for calendar.
-			for demo we have added predefined events in json object.
-		*/
-		events: [
-			{
-				title: 'All Day Event',
-				start: new Date(y, m, 1)
-			},
-			{
-				title: 'Long Event',
-				start: new Date(y, m, d-5),
-				end: new Date(y, m, d-2)
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d-3, 16, 0),
-				allDay: false
-			},
-			{
-				id: 999,
-				title: 'Repeating Event',
-				start: new Date(y, m, d+4, 16, 0),
-				allDay: false
-			},
-			{
-				title: 'Meeting',
-				start: new Date(y, m, d, 10, 30),
-				allDay: false
-			},
-			{
-				title: 'Lunch',
-				start: new Date(y, m, d, 12, 0),
-				end: new Date(y, m, d, 14, 0),
-				allDay: false
-			},
-			{
-				title: 'Birthday Party',
-				start: new Date(y, m, d+1, 19, 0),
-				end: new Date(y, m, d+1, 22, 30),
-				allDay: false
-			},
-			{
-				title: 'Click for Google',
-				start: new Date(y, m, 28),
-				end: new Date(y, m, 29),
-				url: 'http://google.com/'
-			}
-		]
+$(function() { // document ready
+	  
+	  $('#calendar').fullCalendar({
+	    header: {
+	      left: 'prev,next today',
+	      center: 'title',
+	      right: 'month,agendaWeek,agendaDay'
+	    },
+	    defaultDate: '2014-11-12',
+	    editable: true,
+	    eventLimit: true, // allow "more" link when too many events
+	    events: [
+	      {
+	        title: 'All Day Event',
+	        start: '2014-11-01'
+	      },
+	      {
+	        title: 'Long Event',
+	        start: '2014-11-07',
+	        end: '2014-11-10'
+	      },
+	      {
+	        id: 999,
+	        title: 'Repeating Event',
+	        start: '2014-11-09T16:00:00'
+	      },
+	      {
+	        id: 999,
+	        title: 'Repeating Event',
+	        start: '2014-11-16T16:00:00'
+	      },
+	      {
+	        title: 'Conference',
+	        start: '2014-11-11',
+	        end: '2014-11-13'
+	      },
+	      {
+	        title: 'Meeting',
+	        start: '2014-11-12T10:30:00',
+	        end: '2014-11-12T12:30:00'
+	      },
+	      {
+	        title: 'Lunch',
+	        start: '2014-11-12T12:00:00'
+	      },
+	      {
+	        title: 'Meeting',
+	        start: '2014-11-12T14:30:00'
+	      },
+	      {
+	        title: 'Happy Hour',
+	        start: '2014-11-12T17:30:00'
+	      },
+	      {
+	        title: 'Dinner',
+	        start: '2014-11-12T20:00:00'
+	      },
+	      {
+	        title: 'Birthday Party',
+	        start: '2014-11-13T07:00:00'
+	      },
+	      {
+	        title: 'Click for Google',
+	        url: 'http://google.com/',
+	        start: '2014-11-28'
+	      }
+	    ]
+	  });
+	  
 	});
-	
-});
 </script>
+
 </head>
 
 <body>
@@ -180,7 +120,8 @@ $(document).ready(function()
 				<div id="navbar" class="navbar-collapse collapse">
 
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="./">Login</a></li>
+					    <li><a href="cadastro.jsp">Cadastre-se</a></li>
+						<li><a href="login.jsp">Login</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -189,24 +130,13 @@ $(document).ready(function()
 		</nav>
 
 		<!-- Main component for a primary marketing message or call to action -->
-		<div class="jumbotron">
 		
-		<div id='calendar'></div>
 		
-		</div>
-			
+		
 	</div>
 	<!-- /container -->
 
+<div id="calendar"></div>
 
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-	<script src="../../dist/js/bootstrap.min.js"></script>
-	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-	<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

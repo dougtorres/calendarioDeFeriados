@@ -5,23 +5,15 @@ import javax.persistence.Entity;
 @Entity
 public class Admin extends Usuario{
 
-	private boolean admin;
-	
+	public Admin(){}
 	
 	public Admin (String nome, String login, String senha){
 		super(nome,login,senha);
-		this.admin = true;
+		super.setAdmin(true);
 		
 	}
 
-	public boolean isAdmin() {
-		return admin;
-	}
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-	
 	
 	
 }

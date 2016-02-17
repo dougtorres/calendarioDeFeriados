@@ -1,45 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Login</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+	integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+	crossorigin="anonymous">
 
-    <title>Login</title>
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+	integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+	crossorigin="anonymous">
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" /> 
-    
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+	crossorigin="anonymous"></script>
 
-    <!-- Custom styles for this template -->
-    <link href="css/signin.css" rel="stylesheet"> 
+<!-- Custom styles for this template -->
+<link href="css/navbar.css" rel="stylesheet">
 
-  </head>
+<!-- Custom styles for this template -->
+<link href="css/signin.css" rel="stylesheet">
 
-  <body>
+<!-- Custom styles for this template -->
+<link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
 
-    <div class="container">
+		<!-- Static navbar -->
+		<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
 
-      <form class="form-signin" method="POST" action="login.do">
-        <h2 class="form-signin-heading">Realizar Login</h2>
-        <label for="inputLogin" class="sr-only">Login</label>
-        <input type="text" id="inputLogin" class="form-control" placeholder="Login" required autofocus>
-        <label for="inputPassword" class="sr-only">Senha</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Senha" required>
+				<a class="navbar-brand" href="#">Calendário de Feriados 1.0</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="index.jsp">Início</a></li>
+					<li><a href="cadastro.jsp">Cadastre-se</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+		<!--/.container-fluid --> </nav>
+
+		<!-- Main component for a primary marketing message or call to action -->
+
+		<form class="form-signin" method="POST" action="controller.do">
+        <h2 class="form-signin-heading">Realize o login</h2>
+        <label for="loginLogin" class="sr-only">Login</label>
+        <input type="text" name="loginLogin"id="loginLogin" class="form-control" placeholder="Digite seu login" required autofocus>
+        <label for="loginSenha" class="sr-only">Senha</label>
+        <input type="password" name="loginSenha" id="loginSenha" class="form-control" placeholder="Digite sua senha" required>
+        <input type="hidden" name="op" value="login"/> 
         <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Lembre-me
-          </label>
+ 
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Logar</button>
+        <button class="btn btn-lg btn-inverse btn-block" type="submit">Logar</button>
       </form>
-
-    </div> <!-- /container -->
-
-
-  </body>
+		<br> <br> <br>
+		<div align="center" id="resultado">${requestScope.resultado }</div>
+</body>
 </html>
