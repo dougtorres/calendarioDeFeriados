@@ -1,6 +1,11 @@
 package br.edu.ifpb.projetopwebii.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,10 +15,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jboss.logging.Logger;
+
+import com.google.gson.Gson;
+
 import br.edu.ifpb.projetopwebii.dao.DAO;
+import br.edu.ifpb.projetopwebii.dao.FeriadoDAO;
 import br.edu.ifpb.projetopwebii.dao.UsuarioDAO;
 import br.edu.ifpb.projetopwebii.model.Admin;
+import br.edu.ifpb.projetopwebii.model.Calendario;
+import br.edu.ifpb.projetopwebii.model.Feriado;
 import br.edu.ifpb.projetopwebii.model.Usuario;
+import br.edu.ifpb.pwebprojeto.util.TipoFeriado;
 
 /**
  * Servlet implementation class ControllerServlet
@@ -39,6 +52,10 @@ public class ControllerServlet extends HttpServlet {
 		
 		switch(request.getParameter("op")){
 		
+		case "getEventos":
+			getEventos(request, response);
+			break;
+			
 
 			
 		
@@ -61,7 +78,18 @@ public class ControllerServlet extends HttpServlet {
 		case "criaadm":
 			criaAdm(request, response);
 			break;
+			
+		case "addFeriadoFixo":
+			try {
+				addFeriadoFixo(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		}
+		
+		
 
 	}
 
@@ -139,6 +167,104 @@ public class ControllerServlet extends HttpServlet {
 		dao.commit();
 		dao.close();
 
+	}
+	
+	protected void getEventos(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
+		if(session.getAttribute("eventos") != null){
+			listaCalendario = (ArrayList<Calendario>)session.getAttribute("eventos");
+			session.setAttribute("eventos", listaCalendario);
+			
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(new Gson().toJson(listaCalendario));
+			
+			
+		}else{
+		String ano = request.getParameter("ano");
+		ano = ano.substring(0, 4);	
+		System.out.println(request.getParameter("ano"));
+		Calendario c = new Calendario();
+		List<Feriado> lista;
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		lista = dao.readAll();
+		dao.close();
+		Iterator itr = lista.iterator();
+		while(itr.hasNext()){
+			Feriado f = (Feriado) itr.next();
+			if(f.getTipo() == TipoFeriado.Fixo){
+				c.setId(f.getId());
+				c.setTitle(f.getTitulo());
+				c.setStart(ano+"-"+f.getDiaMesInicio());
+				c.setEnd(ano+"-"+f.getDiaMesFim());
+				c.setTipo(f.getTipo());
+				listaCalendario.add(c);
+			}
+
+			session.setAttribute("eventos", listaCalendario);
+			
+			System.out.println(c.getStart());
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(new Gson().toJson(listaCalendario));
+		}
+			
+		}
+		
+	}
+		
+		
+		protected void attFeriadosFixos(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+			
+			String ano = request.getParameter("ano");
+			ano = ano.substring(0, 4);	
+			
+			System.out.println(request.getParameter("ano"));
+			ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
+			HttpSession session = request.getSession();
+			listaCalendario = (ArrayList<Calendario>)session.getAttribute("eventos");
+			Iterator itr = listaCalendario.iterator();
+			while(itr.hasNext()){
+				Calendario c = (Calendario) itr.next();
+				if(c.getTipo() == TipoFeriado.Fixo){
+					c.setId(c.getId());
+					c.setTitle(c.getTitle());
+					c.setStart(ano+"-"+c.getStartDiaMes());
+					c.setEnd(ano+"-"+c.getEndDiaMes());
+					listaCalendario.add(c);
+				}
+
+				
+				
+			}
+	
+			session.setAttribute("eventos", listaCalendario);
+
+	}
+	
+	protected void addFeriadoFixo(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ParseException {
+		String resultado;
+		String titulo = request.getParameter("tituloFeriado");
+		String inicio = request.getParameter("inicioFeriado");
+		String fim = request.getParameter("fimFeriado");
+		Feriado f = new Feriado(titulo, inicio, fim, TipoFeriado.Fixo);
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		dao.begin();
+		dao.create(f);
+		dao.commit();
+		dao.close();
+
+		resultado = "Feriado Fixo Cadastrado Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("cadastrar-feriado-fixo.jsp").forward(request, response);
 	}
 
 }

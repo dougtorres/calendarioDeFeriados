@@ -13,7 +13,7 @@
 	<html>
 <head>
 
-<title>Calendário</title>
+<title>Gerencia Usuários</title>
 
 <meta charset='utf-8' />
 <link
@@ -47,27 +47,61 @@
 	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 	crossorigin="anonymous"></script>
 
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+
 <!-- Custom styles for this template -->
 <link href="css/navbar.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <link href="css/styles.css" rel="stylesheet">
 
+<script>
+	$(document).ready(function() {
+		$('#inicioFeriado').datepicker({
+			format : 'dd/mm/yyyy'
+		}).on('changeDate', function(e) {
+			// Revalidate the date field
+			$('#eventForm').formValidation('revalidateField', 'date');
+		});
 
-<script type="text/javascript">
-$(function() { // document ready
-	
-	  $('#calendar').fullCalendar({
-	    header: {
-	      left: 'prev,next today',
-	      center: 'title',
-	      right: 'month,agendaWeek,agendaDay'
-	    },
 
-	    events: "/pwebprojeto/controller.do?op=getEventos"	
-	    
-	  });
-	  
+		$('#fimFeriado').datepicker({
+			format : 'dd/mm/yyyy'
+		}).on('changeDate', function(e) {
+			// Revalidate the date field
+			$('#eventForm').formValidation('revalidateField', 'date');
+		});
+		
+		$('#eventForm').formValidation({
+			framework : 'bootstrap',
+			icon : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				name : {
+					validators : {
+						notEmpty : {
+							message : 'The name is required'
+						}
+					}
+				},
+				date : {
+					validators : {
+						notEmpty : {
+							message : 'The date is required'
+						},
+						date : {
+							format : 'DD/MM/YYYY',
+							message : 'The date is not a valid'
+						}
+					}
+				}
+			}
+		});
 	});
 </script>
 
@@ -91,12 +125,11 @@ $(function() { // document ready
 							data-toggle="dropdown" role="button" aria-haspopup="true"
 							aria-expanded="false">Gerenciar Feriados<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="cadastrar-feriado-fixo.jsp">Adicionar Feriado Fixo</a></li>
+								<li><a href="#">Adicionar</a></li>
 								<li role="separator" class="divider"></li>
 								<li><a href="#">Separated link</a></li>
 								<li><a href="#">One more separated link</a></li>
 							</ul></li>
-						<li><a href="lista-usuarios.jsp">Gerenciar Usuários</a></li>
 						<li><a href="configuraçãoUser.jsp">Configurações</a></li>
 						<li><a href="controller.do/?op=logout">Sair</a></li>
 					</ul>
@@ -112,8 +145,60 @@ $(function() { // document ready
 
 	</div>
 	<!-- /container -->
+	<div align="center">
+		<form class="form-horizontal" method="POST" action="controller.do">
+			<fieldset>
 
-	<div id="calendar"></div>
+				<!-- Form Name -->
+				<legend>Adicionar Feriado</legend>
+
+				<!-- Text input-->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for="tituloFeriado">Nome
+						do Feriado</label>
+					<div class="col-md-4">
+						<input id="tituloFeriado" name="tituloFeriado" type="text"
+							placeholder="Digite o nome do feriado"
+							class="form-control input-md">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4  control-label">Inicio</label>
+					<div class="col-md-4 date">
+						<div class="input-group input-append date" id="inicioFeriado">
+							<input type="text" class="form-control" name="inicioFeriado" />
+							<span class="input-group-addon add-on"><span
+								class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-4  control-label">Fim</label>
+					<div class="col-md-4 date">
+						<div class="input-group input-append date" id="fimFeriado">
+							<input type="text" class="form-control" name="fimFeriado" /> <span
+								class="input-group-addon add-on"><span
+								class="glyphicon glyphicon-calendar"></span></span>
+						</div>
+					</div>
+				</div>
+
+				<input type="hidden" name="op" value="addFeriadoFixo" />
+				<!-- Button -->
+				<div class="form-group">
+					<label class="col-md-4 control-label" for=""></label>
+					<div class="col-md-4">
+						<button id="" name="" class="btn btn-inverse">Adicionar</button>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+	<br>
+	<br>
+	<br>
+	<div align="center" id="resultado">${requestScope.resultado }</div>
 
 </body>
 	</html>

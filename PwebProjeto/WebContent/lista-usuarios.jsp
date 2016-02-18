@@ -13,7 +13,7 @@
 	<html>
 <head>
 
-<title>Calendário</title>
+<title>Gerencia Usuários</title>
 
 <meta charset='utf-8' />
 <link
@@ -53,24 +53,6 @@
 <!-- Custom styles for this template -->
 <link href="css/styles.css" rel="stylesheet">
 
-
-<script type="text/javascript">
-$(function() { // document ready
-	
-	  $('#calendar').fullCalendar({
-	    header: {
-	      left: 'prev,next today',
-	      center: 'title',
-	      right: 'month,agendaWeek,agendaDay'
-	    },
-
-	    events: "/pwebprojeto/controller.do?op=getEventos"	
-	    
-	  });
-	  
-	});
-</script>
-
 </head>
 
 <body>
@@ -91,12 +73,11 @@ $(function() { // document ready
 							data-toggle="dropdown" role="button" aria-haspopup="true"
 							aria-expanded="false">Gerenciar Feriados<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="cadastrar-feriado-fixo.jsp">Adicionar Feriado Fixo</a></li>
+								<li><a href="#">Adicionar</a></li>
 								<li role="separator" class="divider"></li>
 								<li><a href="#">Separated link</a></li>
 								<li><a href="#">One more separated link</a></li>
 							</ul></li>
-						<li><a href="lista-usuarios.jsp">Gerenciar Usuários</a></li>
 						<li><a href="configuraçãoUser.jsp">Configurações</a></li>
 						<li><a href="controller.do/?op=logout">Sair</a></li>
 					</ul>
@@ -113,7 +94,14 @@ $(function() { // document ready
 	</div>
 	<!-- /container -->
 
-	<div id="calendar"></div>
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">Panel heading</div>
+
+		<!-- Table -->
+		<table class="table">
+		</table>
+	</div>
 
 </body>
 	</html>
