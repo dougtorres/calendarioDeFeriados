@@ -10,7 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.xml.bind.annotation.XmlMixed;
 
 import br.edu.ifpb.pwebprojeto.util.TipoFeriado;
 @Entity
@@ -65,8 +64,9 @@ public class Feriado {
 		return sdf1.format(this.inicioSubstituto);
 	}
 	
-	public void setInicio(Date inicio) {
-		this.inicio = inicio;
+	public void setInicio(String inicio) throws ParseException {
+		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
+		this.inicio = sdf1.parse(inicio);
 	}
 	
 	public String getDiaMesInicio() {
@@ -89,8 +89,9 @@ public class Feriado {
 	}
 
 
-	public void setFim(Date fim) {
-		this.fim = fim;
+	public void setFim(String fim) throws ParseException {
+		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
+		this.fim = sdf1.parse(fim);
 	}
 
 	public String getCor() {

@@ -171,22 +171,8 @@ public class ControllerServlet extends HttpServlet {
 	
 	protected void getEventos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
 		ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
-		if(session.getAttribute("eventos") != null){
-			listaCalendario = (ArrayList<Calendario>)session.getAttribute("eventos");
-			session.setAttribute("eventos", listaCalendario);
-			
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			PrintWriter out = response.getWriter();
-			out.write(new Gson().toJson(listaCalendario));
-			
-			
-		}else{
-		String ano = request.getParameter("ano");
-		ano = ano.substring(0, 4);	
-		System.out.println(request.getParameter("ano"));
+
 		Calendario c = new Calendario();
 		List<Feriado> lista;
 		FeriadoDAO dao = new FeriadoDAO();
@@ -199,52 +185,58 @@ public class ControllerServlet extends HttpServlet {
 			if(f.getTipo() == TipoFeriado.Fixo){
 				c.setId(f.getId());
 				c.setTitle(f.getTitulo());
-				c.setStart(ano+"-"+f.getDiaMesInicio());
-				c.setEnd(ano+"-"+f.getDiaMesFim());
+				System.out.println(f.getInicio());
+				c.setStart(f.getInicio());
+				c.setEnd(f.getFim());
 				c.setTipo(f.getTipo());
 				listaCalendario.add(c);
 			}
-
-			session.setAttribute("eventos", listaCalendario);
+			
+		}
 			
 			System.out.println(c.getStart());
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
 			out.write(new Gson().toJson(listaCalendario));
-		}
-			
-		}
 		
 	}
+	
 		
 		
 		protected void attFeriadosFixos(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
-			
+				throws ServletException, IOException, ParseException {
+			ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
 			String ano = request.getParameter("ano");
 			ano = ano.substring(0, 4);	
+			System.out.println(ano);
+			Calendario c = new Calendario();
+			List<Feriado> lista;
+			FeriadoDAO dao = new FeriadoDAO();
+			dao.open();
+			lista = dao.readAll();
 			
-			System.out.println(request.getParameter("ano"));
-			ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
-			HttpSession session = request.getSession();
-			listaCalendario = (ArrayList<Calendario>)session.getAttribute("eventos");
-			Iterator itr = listaCalendario.iterator();
+			Iterator itr = lista.iterator();
 			while(itr.hasNext()){
-				Calendario c = (Calendario) itr.next();
-				if(c.getTipo() == TipoFeriado.Fixo){
-					c.setId(c.getId());
-					c.setTitle(c.getTitle());
-					c.setStart(ano+"-"+c.getStartDiaMes());
-					c.setEnd(ano+"-"+c.getEndDiaMes());
+				Feriado f = (Feriado) itr.next();
+				if(f.getTipo() == TipoFeriado.Fixo){
+					c.setId(f.getId());
+					c.setTitle(f.getTitulo());
+					c.setStart(ano+"-"+f.getDiaMesInicio());
+					c.setEnd(ano+"-"+f.getDiaMesFim());
+					c.setTipo(f.getTipo());
+					f.setInicio(c.getStart());
+					f.setFim(c.getEnd());
+					dao.begin();
+					dao.update(f);
+					dao.commit();
+	
 					listaCalendario.add(c);
 				}
-
 				
+				dao.close();
 				
 			}
-	
-			session.setAttribute("eventos", listaCalendario);
 
 	}
 	

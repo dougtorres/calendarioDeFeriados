@@ -51,7 +51,7 @@ $(document).ready(function() { // document ready
 			var moment = $('#calendar').fullCalendar('getDate').format();
 			$.ajax({
 		        url: "/pwebprojeto/controller.do?op=getEventos&ano="+moment,
-		        type: "POST"
+		        type: "GET"
 			        
 
 
