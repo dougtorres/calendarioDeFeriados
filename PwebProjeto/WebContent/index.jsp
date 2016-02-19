@@ -33,6 +33,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+
 	  $('#calendar').fullCalendar({
 	    header: {
 	      left: 'prev,next today',
@@ -43,6 +44,11 @@ $(document).ready(function() {
 	    events: "/pwebprojeto/controller.do?op=getEventos"
 	    
 	  })
+
+
+	 
+
+	  
 });
 
 </script>

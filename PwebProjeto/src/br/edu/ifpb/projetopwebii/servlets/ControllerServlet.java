@@ -57,7 +57,22 @@ public class ControllerServlet extends HttpServlet {
 		case "addFeriadoSubstituto":
 			addFeriadoSubstituto(request, response);
 			break;
-			
+		case "alteraFeriadoJSP":
+			try {
+				alteraFeriadoJSP(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "excluirFeriado":
+			try {
+				excluirFeriado(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		
 			
 
@@ -107,6 +122,17 @@ public class ControllerServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			break;
+		
+		case "alteraFeriado":
+	
+				try {
+					alteraFeriado(request, response);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
 			break;
 		}
 		
@@ -353,6 +379,59 @@ public class ControllerServlet extends HttpServlet {
 		resultado = "Feriado Substituto Cadastrado Com Sucesso!";
 		request.setAttribute("resultado", resultado);
 		request.getRequestDispatcher("cadastrar-feriado-substituto.jsp").forward(request, response);
+	}
+	protected void alteraFeriadoJSP(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String id = request.getParameter("id");
+
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		dao.begin();
+		Feriado aux = dao.read(id);
+		dao.close();
+
+		request.setAttribute("feriado", aux);
+		request.getRequestDispatcher("alterar-feriado.jsp").forward(request, response);
+	}
+	
+	protected void alteraFeriado(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		String id = request.getParameter("alteraIdFeriado");
+		String titulo = request.getParameter("AlteraTituloFeriado");
+		String inicio = request.getParameter("AlteraInicioFeriado");
+		String fim = request.getParameter("AlteraFimFeriado");
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		dao.begin();
+		Feriado aux = dao.read(id);
+		aux.setTitulo(titulo);
+		aux.setInicio(inicio);
+		aux.setFim(fim);
+		dao.update(aux);
+		dao.commit();
+		dao.close();
+
+		resultado = "Feriado Alterado Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("alterar-feriado.jsp").forward(request, response);
+	}
+	
+	protected void excluirFeriado(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		String id = request.getParameter("alteraIdFeriado");
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		dao.begin();
+		Feriado aux = dao.read(id);
+		dao.delete(aux);
+		dao.commit();
+		dao.close();
+
+		resultado = "Feriado excluido Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("alterar-feriado.jsp").forward(request, response);
 	}
 
 }

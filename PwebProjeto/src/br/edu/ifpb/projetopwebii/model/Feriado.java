@@ -59,13 +59,18 @@ public class Feriado {
 		return sdf1.format(this.inicio);
 	}
 	
+	public String getInicioAlterar() {
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		return sdf1.format(this.inicio);
+	}
+	
 	public String getInicioSubstituto() {
 		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
 		return sdf1.format(this.inicioSubstituto);
 	}
 	
 	public void setInicio(String inicio) throws ParseException {
-		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
 		this.inicio = sdf1.parse(inicio);
 	}
 	
@@ -83,6 +88,12 @@ public class Feriado {
 		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
 		return sdf1.format(this.fim);
 	}
+	
+	public String getFimAlterar() {
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		return sdf1.format(this.fim);
+	}
+	
 	public String getFimSubstituto() {
 		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
 		return sdf1.format(this.fimSubstituto);
@@ -90,7 +101,7 @@ public class Feriado {
 
 
 	public void setFim(String fim) throws ParseException {
-		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
 		this.fim = sdf1.parse(fim);
 	}
 

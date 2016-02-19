@@ -56,6 +56,9 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+
+
+	var Admin = "${sessionScope.usuario.isAdmin()}";
 	  $('#calendar').fullCalendar({
 	    header: {
 	      left: 'prev,next today',
@@ -63,10 +66,21 @@ $(document).ready(function() {
 	      right: ''
 	    },
 	    
-	    events: "/pwebprojeto/controller.do?op=getEventos"
-	    
-	  })
+	    events: "/pwebprojeto/controller.do?op=getEventos",
+
+
+	    	eventClick: function(calEvent, jsEvent, view) {
+				//$("#commentModal").modal();
+	
+					window.location.href = "/pwebprojeto/controller.do?id="+calEvent.id+"&op=alteraFeriadoJSP ";
+
+	  }
+
+	  
+})
+
 });
+
 
 </script>
 
