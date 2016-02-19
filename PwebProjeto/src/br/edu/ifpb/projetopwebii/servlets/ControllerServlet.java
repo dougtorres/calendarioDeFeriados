@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jboss.logging.Logger;
-
 import com.google.gson.Gson;
 
 import br.edu.ifpb.projetopwebii.dao.DAO;
@@ -56,6 +54,12 @@ public class ControllerServlet extends HttpServlet {
 			getEventos(request, response);
 			break;
 			
+		case "addFeriadoSubstituto":
+			addFeriadoSubstituto(request, response);
+			break;
+			
+		
+			
 
 			
 		
@@ -87,7 +91,26 @@ public class ControllerServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
+		case "addFeriadoFixoSubstituto":
+			try {
+				adcFeriadoSubstituto(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+			
+		case "addFeriadoMovel":
+			try {
+				addFeriadoMovel(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		}
+		
+		
 		
 		
 
@@ -169,32 +192,100 @@ public class ControllerServlet extends HttpServlet {
 
 	}
 	
+	protected void addFeriadoSubstituto(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		List<Feriado> lista;
+		ArrayList<Feriado> feriadosFixos = new ArrayList<Feriado>();
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		lista = dao.readAll();
+		dao.close();
+		for(Feriado f: lista){
+			
+			if(f.getTipo() == TipoFeriado.Fixo){
+				
+				Feriado aux = f;
+				feriadosFixos.add(aux);
+				
+				}
+				
+			}
+		request.setAttribute("feriadosFixos", feriadosFixos);
+		request.getRequestDispatcher("cadastrar-feriado-substituto.jsp").forward(request, response);
+		}
+	
 	protected void getEventos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
 
-		Calendario c = new Calendario();
+		int ano = 1990;
 		List<Feriado> lista;
 		FeriadoDAO dao = new FeriadoDAO();
 		dao.open();
+		dao.begin();
 		lista = dao.readAll();
 		dao.close();
 		Iterator itr = lista.iterator();
 		while(itr.hasNext()){
 			Feriado f = (Feriado) itr.next();
-			if(f.getTipo() == TipoFeriado.Fixo){
+			if(f.getTipo() == TipoFeriado.Substituto){
+				String anoSub = f.getAnoSubstituto();
+				Calendario c = new Calendario();
 				c.setId(f.getId());
 				c.setTitle(f.getTitulo());
-				System.out.println(f.getInicio());
+				c.setStart(f.getInicioSubstituto());
+				c.setEnd(f.getFimSubstituto());
+				c.setTipo(f.getTipo());
+				listaCalendario.add(c);
+				for(int i=0; i <= 60; i++){
+					
+				if(ano != Integer.parseInt(anoSub)){
+				Calendario c2 = new Calendario();
+				c2.setId(f.getId());
+				c2.setTitle(f.getTitulo());
+				c2.setStart(Integer.toString(ano)+"-"+f.getDiaMesInicio());
+				c2.setEnd(Integer.toString(ano)+"-"+f.getDiaMesFim());
+				c2.setTipo(f.getTipo());
+				listaCalendario.add(c2);
+				ano++;}
+				else
+					ano++;
+				}
+				
+			ano = 1990;	
+				
+				
+			}if(f.getTipo() == TipoFeriado.Fixo){
+				
+				for(int i=0; i <= 60; i++){
+				Calendario c = new Calendario();
+				c.setId(f.getId());
+				c.setTitle(f.getTitulo());
+				c.setStart(Integer.toString(ano)+"-"+f.getDiaMesInicio());
+				c.setEnd(Integer.toString(ano)+"-"+f.getDiaMesFim());
+				c.setTipo(f.getTipo());
+				listaCalendario.add(c);
+				ano++;
+				}
+				
+			ano = 1990;	
+			}if(f.getTipo() == TipoFeriado.Movel){
+			
+				Calendario c = new Calendario();
+				c.setId(f.getId());
+				c.setTitle(f.getTitulo());
 				c.setStart(f.getInicio());
 				c.setEnd(f.getFim());
 				c.setTipo(f.getTipo());
 				listaCalendario.add(c);
-			}
+				
+				}
+
 			
 		}
 			
-			System.out.println(c.getStart());
+			
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
@@ -203,43 +294,6 @@ public class ControllerServlet extends HttpServlet {
 	}
 	
 		
-		
-		protected void attFeriadosFixos(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException, ParseException {
-			ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
-			String ano = request.getParameter("ano");
-			ano = ano.substring(0, 4);	
-			System.out.println(ano);
-			Calendario c = new Calendario();
-			List<Feriado> lista;
-			FeriadoDAO dao = new FeriadoDAO();
-			dao.open();
-			lista = dao.readAll();
-			
-			Iterator itr = lista.iterator();
-			while(itr.hasNext()){
-				Feriado f = (Feriado) itr.next();
-				if(f.getTipo() == TipoFeriado.Fixo){
-					c.setId(f.getId());
-					c.setTitle(f.getTitulo());
-					c.setStart(ano+"-"+f.getDiaMesInicio());
-					c.setEnd(ano+"-"+f.getDiaMesFim());
-					c.setTipo(f.getTipo());
-					f.setInicio(c.getStart());
-					f.setFim(c.getEnd());
-					dao.begin();
-					dao.update(f);
-					dao.commit();
-	
-					listaCalendario.add(c);
-				}
-				
-				dao.close();
-				
-			}
-
-	}
-	
 	protected void addFeriadoFixo(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, ParseException {
 		String resultado;
@@ -257,6 +311,48 @@ public class ControllerServlet extends HttpServlet {
 		resultado = "Feriado Fixo Cadastrado Com Sucesso!";
 		request.setAttribute("resultado", resultado);
 		request.getRequestDispatcher("cadastrar-feriado-fixo.jsp").forward(request, response);
+	}
+	
+	
+	protected void addFeriadoMovel(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ParseException {
+		String resultado;
+		String titulo = request.getParameter("tituloFeriadoMovel");
+		String inicio = request.getParameter("inicioFeriadoMovel");
+		String fim = request.getParameter("fimFeriadoMovel");
+		Feriado f = new Feriado(titulo, inicio, fim, TipoFeriado.Movel);
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		dao.begin();
+		dao.create(f);
+		dao.commit();
+		dao.close();
+
+		resultado = "Feriado Móvel Cadastrado Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("cadastrar-feriado-movel.jsp").forward(request, response);
+	}
+	protected void adcFeriadoSubstituto(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		String id = request.getParameter("feriadoSubstituto");
+		String inicio = request.getParameter("inicioFeriadoSubstituto");
+		String fim = request.getParameter("fimFeriadoSubstituto");
+		System.out.println(inicio);
+		FeriadoDAO dao = new FeriadoDAO();
+		dao.open();
+		dao.begin();
+		Feriado aux = dao.read(id);
+		aux.setInicioSubstituto(inicio);
+		aux.setFimSubstituto(fim);
+		aux.setTipo(TipoFeriado.Substituto);
+		dao.update(aux);
+		dao.commit();
+		dao.close();
+
+		resultado = "Feriado Substituto Cadastrado Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("cadastrar-feriado-substituto.jsp").forward(request, response);
 	}
 
 }

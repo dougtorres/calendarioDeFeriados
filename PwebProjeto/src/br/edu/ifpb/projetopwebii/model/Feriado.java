@@ -110,6 +110,22 @@ public class Feriado {
 		this.tipo = tipo;
 	}
 
+	public void setInicioSubstituto(String inicioSubstituto) throws ParseException {
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		this.inicioSubstituto = sdf1.parse(inicioSubstituto);
+	}
+
+	public void setFimSubstituto(String fimSubstituto) throws ParseException {
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		this.fimSubstituto = sdf1.parse(fimSubstituto);
+	}
+	
+	public String getAnoSubstituto(){
+		SimpleDateFormat sdf1= new SimpleDateFormat("yyyy"); 
+		return sdf1.format(this.inicioSubstituto);
+	}
+
+
 	
 	
 	

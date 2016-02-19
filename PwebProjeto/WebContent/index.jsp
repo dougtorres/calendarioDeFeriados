@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,36 +31,19 @@
 <link href="css/styles.css" rel="stylesheet">
 
 
-<script>
-
-$(document).ready(function() { // document ready
-	
+<script type="text/javascript">
+$(document).ready(function() {
 	  $('#calendar').fullCalendar({
 	    header: {
 	      left: 'prev,next today',
 	      center: 'title',
-	      right: 'month,agendaWeek,agendaDay'
+		right: ''
 	    },
 	    
 	    events: "/pwebprojeto/controller.do?op=getEventos"
 	    
-	  });
-
-	  $(".fc-prev-button, .fc-next-button, .fc-today-button").click(function(){
-
-			var moment = $('#calendar').fullCalendar('getDate').format();
-			$.ajax({
-		        url: "/pwebprojeto/controller.do?op=getEventos&ano="+moment,
-		        type: "GET"
-			        
-
-
-		    });
-		});
-			  
-	  
-	});
-
+	  })
+});
 
 </script>
 
