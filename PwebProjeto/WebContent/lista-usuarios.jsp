@@ -57,7 +57,7 @@
 
 <body>
 
-	<div class="container">
+	<div class="container"  >
 
 		<!-- Static navbar -->
 		<nav class="navbar navbar-default">
@@ -68,18 +68,20 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 
+					
 					<ul class="nav navbar-nav navbar-right">
+					<li><a href="dashboard-administrador.jsp">Dashboard</a></li>
 						<li class="dropdown"><a href="#" class="dropdown-toggle"
 							data-toggle="dropdown" role="button" aria-haspopup="true"
 							aria-expanded="false">Gerenciar Feriados<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Adicionar</a></li>
-								<li role="separator" class="divider"></li>
-								<li><a href="#">Separated link</a></li>
-								<li><a href="#">One more separated link</a></li>
+								<li><a href="cadastrar-feriado-fixo.jsp">Adicionar Feriado Fixo</a></li>
+								<li><a href="controller.do?op=addFeriadoSubstituto">Adicionar Feriado Substituto</a></li>
+								<li><a href="cadastrar-feriado-movel.jsp">Adicionar Feriado Móvel</a></li>
 							</ul></li>
-						<li><a href="configuraçãoUser.jsp">Configurações</a></li>
-						<li><a href="controller.do/?op=logout">Sair</a></li>
+						<li><a href="lista-usuarios.jsp">Gerenciar Usuários</a></li>
+
+						<li><a href="controller.do?op=logout">Sair</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -93,13 +95,31 @@
 
 	</div>
 	<!-- /container -->
-
-	<div class="panel panel-default">
+<br><br>
+	<div class="panel panel-default"style="width: 600px; position: relative; left: 30%; right: 30% ">
 		<!-- Default panel contents -->
-		<div class="panel-heading">Panel heading</div>
+		<div class="panel-heading">Usuários</div>
 
 		<!-- Table -->
-		<table class="table">
+		<table class="table table-striped">
+		<tr>
+                    <th>Usuário</th>
+                    <th>login</th>
+                    <th></th>
+                </tr>
+		<c:forEach var="usuario" items="${requestScope.usuarios}">
+		<tr>
+    <td>
+        <c:out value="${usuario.getNome()}" />
+    </td>
+    <td>
+     <c:out value="${usuario.getLogin()}" />
+    </td>
+    <td>
+		<a href="/pwebprojeto/controller.do?op=excluirFeriado" class="btn btn-danger">Excluir</a>
+    </td>
+    </tr>
+</c:forEach>
 		</table>
 	</div>
 

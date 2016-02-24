@@ -1,4 +1,4 @@
-package br.edu.ifpb.projetopwebii.dao;
+package br.edu.ifpb.pwebprojeto.dao;
 
 public interface DAOInterface<T> {
 	public void create(T obj);

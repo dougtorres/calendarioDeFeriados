@@ -1,11 +1,14 @@
-package br.edu.ifpb.projetopwebii.servlets;
+package br.edu.ifpb.pwebprojeto.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,13 +20,14 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-import br.edu.ifpb.projetopwebii.dao.DAO;
-import br.edu.ifpb.projetopwebii.dao.FeriadoDAO;
-import br.edu.ifpb.projetopwebii.dao.UsuarioDAO;
-import br.edu.ifpb.projetopwebii.model.Admin;
-import br.edu.ifpb.projetopwebii.model.Calendario;
-import br.edu.ifpb.projetopwebii.model.Feriado;
-import br.edu.ifpb.projetopwebii.model.Usuario;
+import br.edu.ifpb.pwebprojeto.dao.DAO;
+import br.edu.ifpb.pwebprojeto.dao.FeriadoDAO;
+import br.edu.ifpb.pwebprojeto.dao.UsuarioDAO;
+import br.edu.ifpb.pwebprojeto.model.Admin;
+import br.edu.ifpb.pwebprojeto.model.Calendario;
+import br.edu.ifpb.pwebprojeto.model.Feriado;
+import br.edu.ifpb.pwebprojeto.model.Nota;
+import br.edu.ifpb.pwebprojeto.model.Usuario;
 import br.edu.ifpb.pwebprojeto.util.TipoFeriado;
 
 /**
@@ -73,12 +77,50 @@ public class ControllerServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
-		
 			
-
-			
+		case "adicionarNotaJSP":
+			try {
+				adicionarNotaJSP(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "getNotas":
+			getNotas(request, response);
+			break;
+		case "alterarNotaJSP":
+			try {
+				alterarNotaJSP(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		break;
 		
+		case "logout":
+			try {
+				logout(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "alterarUsuario":
+			try {
+				alterarUsuario(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "listarUsuarios":
+			listarUsuarios(request, response);
+			break;
+			
 		}
+		
+		
 
 	}
 
@@ -134,6 +176,27 @@ public class ControllerServlet extends HttpServlet {
 				}
 		
 			break;
+		case "adicionarNota":
+			try {
+				adicionarNota(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "alterarNota":
+			try {
+				alterarNota(request, response);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "alterar_usuario":
+			alterar_Usuario(request, response);
+			break;
+		
+			
 		}
 		
 		
@@ -263,6 +326,7 @@ public class ControllerServlet extends HttpServlet {
 				c.setStart(f.getInicioSubstituto());
 				c.setEnd(f.getFimSubstituto());
 				c.setTipo(f.getTipo());
+				c.setColor(f.getCor());
 				listaCalendario.add(c);
 				for(int i=0; i <= 60; i++){
 					
@@ -273,6 +337,7 @@ public class ControllerServlet extends HttpServlet {
 				c2.setStart(Integer.toString(ano)+"-"+f.getDiaMesInicio());
 				c2.setEnd(Integer.toString(ano)+"-"+f.getDiaMesFim());
 				c2.setTipo(f.getTipo());
+				c2.setColor(f.getCor());
 				listaCalendario.add(c2);
 				ano++;}
 				else
@@ -290,6 +355,7 @@ public class ControllerServlet extends HttpServlet {
 				c.setTitle(f.getTitulo());
 				c.setStart(Integer.toString(ano)+"-"+f.getDiaMesInicio());
 				c.setEnd(Integer.toString(ano)+"-"+f.getDiaMesFim());
+				c.setColor(f.getCor());
 				c.setTipo(f.getTipo());
 				listaCalendario.add(c);
 				ano++;
@@ -304,6 +370,7 @@ public class ControllerServlet extends HttpServlet {
 				c.setStart(f.getInicio());
 				c.setEnd(f.getFim());
 				c.setTipo(f.getTipo());
+				c.setColor(f.getCor());
 				listaCalendario.add(c);
 				
 				}
@@ -327,6 +394,7 @@ public class ControllerServlet extends HttpServlet {
 		String inicio = request.getParameter("inicioFeriado");
 		String fim = request.getParameter("fimFeriado");
 		Feriado f = new Feriado(titulo, inicio, fim, TipoFeriado.Fixo);
+		f.setCor("#c36969");
 		FeriadoDAO dao = new FeriadoDAO();
 		dao.open();
 		dao.begin();
@@ -347,6 +415,7 @@ public class ControllerServlet extends HttpServlet {
 		String inicio = request.getParameter("inicioFeriadoMovel");
 		String fim = request.getParameter("fimFeriadoMovel");
 		Feriado f = new Feriado(titulo, inicio, fim, TipoFeriado.Movel);
+		f.setCor("#7269c3");
 		FeriadoDAO dao = new FeriadoDAO();
 		dao.open();
 		dao.begin();
@@ -372,6 +441,7 @@ public class ControllerServlet extends HttpServlet {
 		aux.setInicioSubstituto(inicio);
 		aux.setFimSubstituto(fim);
 		aux.setTipo(TipoFeriado.Substituto);
+		aux.setCor("#69c36f");
 		dao.update(aux);
 		dao.commit();
 		dao.close();
@@ -434,4 +504,175 @@ public class ControllerServlet extends HttpServlet {
 		request.getRequestDispatcher("alterar-feriado.jsp").forward(request, response);
 	}
 
+	protected void adicionarNota(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		String descricao = request.getParameter("descricaoNota");
+		String data = request.getParameter("dataNota");
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		Date d = sdf1.parse(data);
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+		HttpSession session = request.getSession();
+		Usuario aux = (Usuario) session.getAttribute("usuario");
+		UsuarioDAO dao = new UsuarioDAO();
+		dao.open();
+		dao.begin();
+		Usuario u = dao.read(aux.getId());
+		u.addNota(descricao, sdf2.format(d));
+		dao.update(u);
+		dao.commit();
+		dao.close();
+		session.setAttribute("usuario", u);
+		resultado = "Nota Cadastrada Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("adicionar-nota.jsp").forward(request, response);
+	}
+	
+	protected void adicionarNotaJSP(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String data = request.getParameter("data");
+
+
+		request.setAttribute("data", data);
+		request.getRequestDispatcher("adicionar-nota.jsp").forward(request, response);
+	}
+	
+
+	protected void getNotas(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		List<Nota> notas = null;
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		notas = u.getNotas();
+			System.out.println(notas.get(0).getId());
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(new Gson().toJson(notas));
+		
+	}
+	
+	protected void getCalendarioUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		List<Nota> notas = null;
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		notas = u.getNotas();
+		
+			System.out.println(notas.get(0).getId());
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(new Gson().toJson(notas));
+		
+	}
+	
+	
+	protected void alterarNotaJSP(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		request.setAttribute("id", request.getParameter("id"));
+		request.setAttribute("descricao", request.getParameter("descricao"));
+		request.setAttribute("data", request.getParameter("data"));
+		
+		request.getRequestDispatcher("alterar-nota.jsp").forward(request, response);
+	}
+	
+	protected void alterarNota(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, ParseException {
+		String resultado = null;
+		List<Nota> notas = null;
+		String data = request.getParameter("alterarDataNota");
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		Date d = sdf1.parse(data);
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		notas = u.getNotas();
+		int id = Integer.parseInt(request.getParameter("id"));
+		String descricao = request.getParameter("alterarDescricaoNota");
+	
+		
+		ListIterator<Nota> it = notas.listIterator();
+		while(it.hasNext()){
+			Nota n = (Nota) it.next();
+			if(n.getId() == id){
+				notas.remove(n);
+				UsuarioDAO dao = new UsuarioDAO();
+				dao.open();
+				dao.begin();
+				n.setText(descricao);
+				n.setDate(sdf2.format(d));
+				notas.add(n);
+				u.setNotas(notas);
+				dao.update(u);
+				dao.commit();
+				dao.close();
+				resultado = "Nota alterada Com Sucesso!";
+				session.setAttribute("usuario", u);
+			}
+			
+			
+			
+		}
+		
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("alterar-nota.jsp").forward(request, response);
+		
+	}
+	protected void logout(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+		response.sendRedirect("index.jsp");
+	}
+	
+	protected void alterarUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		request.setAttribute("usuario", u);
+		request.getRequestDispatcher("alterar-usuario.jsp").forward(request, response);
+	}
+	
+
+	protected void alterar_Usuario(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String nome = request.getParameter("nome");
+		String login = request.getParameter("login");
+		String senha = request.getParameter("password");
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		u.setNome(nome);
+		u.setLogin(login);
+		u.setSenha(senha);
+		UsuarioDAO dao = new UsuarioDAO();
+		dao.open();
+		dao.begin();
+		dao.update(u);
+		dao.commit();
+		dao.close();
+		String resultado = "Usuário alterado Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		RequestDispatcher d = request.getRequestDispatcher("cadastro.jsp");
+		d.forward(request, response);
+
+	}
+
+	protected void listarUsuarios(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		List<Usuario> usuarios = null;
+		UsuarioDAO dao = new UsuarioDAO();
+		dao.open();
+		dao.begin();
+		usuarios = dao.readAll();
+		dao.commit();
+		dao.close();
+		request.setAttribute("usuarios", usuarios);
+		RequestDispatcher d = request.getRequestDispatcher("lista-usuarios.jsp");
+		d.forward(request, response);
+
+	}
 }

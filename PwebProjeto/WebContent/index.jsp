@@ -86,6 +86,9 @@ $(document).ready(function() {
 	<!-- /container -->
 
 <div id="calendar"></div>
-
+<div style="position: absolute; left: 23%;">Legenda:<br>
+Feriado Fixo: Vermelho<br>
+Feriado Substituto: Verde<br>
+Feriado Móvel: Roxo</div>
 </body>
 </html>

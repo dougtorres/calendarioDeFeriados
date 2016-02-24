@@ -1,11 +1,11 @@
-package br.edu.ifpb.projetopwebii.dao;
+package br.edu.ifpb.pwebprojeto.dao;
 
 import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import br.edu.ifpb.projetopwebii.model.Feriado;
+import br.edu.ifpb.pwebprojeto.model.Feriado;
 
 public class FeriadoDAO extends DAO<Feriado>{
 	

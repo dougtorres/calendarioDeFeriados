@@ -108,13 +108,10 @@ $(document).ready(function() {
 								<li><a href="cadastrar-feriado-fixo.jsp">Adicionar Feriado Fixo</a></li>
 								<li><a href="controller.do?op=addFeriadoSubstituto">Adicionar Feriado Substituto</a></li>
 								<li><a href="cadastrar-feriado-movel.jsp">Adicionar Feriado Móvel</a></li>
-								<li role="separator" class="divider"></li>
-								<li><a href="#">Separated link</a></li>
-								<li><a href="#">One more separated link</a></li>
 							</ul></li>
-						<li><a href="lista-usuarios.jsp">Gerenciar Usuários</a></li>
-						<li><a href="configuraçãoUser.jsp">Configurações</a></li>
-						<li><a href="controller.do/?op=logout">Sair</a></li>
+						<li><a href="controller.do?op=listarUsuarios">Gerenciar Usuários</a></li>
+			
+						<li><a href="controller.do?op=logout">Sair</a></li>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -130,7 +127,10 @@ $(document).ready(function() {
 	<!-- /container -->
 
 	<div id="calendar"></div>
-
+<div style="position: absolute; left: 23%;">Legenda:<br>
+Feriado Fixo: Vermelho<br>
+Feriado Substituto: Verde<br>
+Feriado Móvel: Roxo</div>
 </body>
 	</html>
 

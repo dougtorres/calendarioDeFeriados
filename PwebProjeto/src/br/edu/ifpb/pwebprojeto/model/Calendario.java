@@ -1,4 +1,4 @@
-package br.edu.ifpb.projetopwebii.model;
+package br.edu.ifpb.pwebprojeto.model;
 
 import br.edu.ifpb.pwebprojeto.util.TipoFeriado;
 

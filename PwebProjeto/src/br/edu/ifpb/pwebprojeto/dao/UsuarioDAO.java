@@ -1,11 +1,13 @@
-package br.edu.ifpb.projetopwebii.dao;
+package br.edu.ifpb.pwebprojeto.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import br.edu.ifpb.projetopwebii.model.Usuario;
+import br.edu.ifpb.pwebprojeto.model.Nota;
+import br.edu.ifpb.pwebprojeto.model.Usuario;
 
 public class UsuarioDAO extends DAO<Usuario>{
 
@@ -29,6 +31,17 @@ public class UsuarioDAO extends DAO<Usuario>{
 			return null;
 		}
 	}
+	
+	public ArrayList<Nota> getNota(String descricao, String data){
+		try{
+			Query q = manager.createQuery("select n from Nota n where n.title = '"+descricao+"' AND n.date = '"+data+"'");
+			ArrayList<Nota> aux = (ArrayList<Nota>) q.getResultList();
+			return aux;
+		}catch(NoResultException e){
+			return null;
+		}
+	}
+	
 	
 	public List<Usuario> readAllUserInactive(){
 		try{

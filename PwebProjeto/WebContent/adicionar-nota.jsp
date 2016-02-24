@@ -3,17 +3,18 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:if
-	test="${empty sessionScope || sessionScope.status == 'logado' && sessionScope.usuario.isAdmin() != true}">
+	test="${empty sessionScope || sessionScope.status == 'logado' && sessionScope.usuario.isAdmin() != false}">
 	<c:redirect url="index.jsp"></c:redirect>
 </c:if>
 <c:if
-	test="${sessionScope.status == 'logado' && sessionScope.usuario.isAdmin() == true }">
-
+	test="${sessionScope.status == 'logado' && sessionScope.usuario.isAdmin() == false }">
+	
+	
 	<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 	<html>
 <head>
 
-<title>Gerencia Usuários</title>
+<title>Adicionar Nota</title>
 
 <meta charset='utf-8' />
 <link
@@ -47,7 +48,8 @@
 	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
 	crossorigin="anonymous"></script>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
 
 
 <!-- Custom styles for this template -->
@@ -120,9 +122,12 @@
 				<div id="navbar" class="navbar-collapse collapse">
 
 					<ul class="nav navbar-nav navbar-right">
-							<li><a href="dashboard-administrador.jsp">Dashboard</a></li>
-	
+						
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="dashboard.jsp">Dashboard</a></li>
+						<li><a href=controller.do?op=alterarUsuario">Configurações</a></li>
 						<li><a href="controller.do?op=logout">Sair</a></li>
+					</ul>
 					</ul>
 				</div>
 				<!--/.nav-collapse -->
@@ -141,40 +146,30 @@
 			<fieldset>
 
 				<!-- Form Name -->
-				<legend>Adicionar Feriado</legend>
+				<legend>Adicionar Nota</legend>
 
 				<!-- Text input-->
 				<div class="form-group">
-					<label class="col-md-4 control-label" for="tituloFeriado">Nome
-						do Feriado</label>
+					<label class="col-md-4 control-label" for="descricaoNota">Descrição da Nota</label>
 					<div class="col-md-4">
-						<input id="tituloFeriado" name="tituloFeriado" type="text"
-							placeholder="Digite o nome do feriado"
-							class="form-control input-md">
+						<input id="descricaoNota" name="descricaoNota" type="text"
+							placeholder="Digite a descrição da nota"
+							class="form-control input-md" >
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4  control-label">Inicio</label>
+					<label class="col-md-4  control-label">Data</label>
 					<div class="col-md-4 date">
-						<div class="input-group input-append date" id="inicioFeriado">
-							<input type="text" class="form-control" name="inicioFeriado" />
+						<div class="input-group input-append date" id="dataNota">
+							<input type="text" class="form-control" name="dataNota" value="${param.data}"/>
 							<span class="input-group-addon add-on"><span
 								class="glyphicon glyphicon-calendar"></span></span>
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-md-4  control-label">Fim</label>
-					<div class="col-md-4 date">
-						<div class="input-group input-append date" id="fimFeriado">
-							<input type="text" class="form-control" name="fimFeriado" /> <span
-								class="input-group-addon add-on"><span
-								class="glyphicon glyphicon-calendar"></span></span>
-						</div>
-					</div>
-				</div>
 
-				<input type="hidden" name="op" value="addFeriadoFixo" />
+
+				<input type="hidden" name="op" value="adicionarNota" />
 				<!-- Button -->
 				<div class="form-group">
 					<label class="col-md-4 control-label" for=""></label>
@@ -185,7 +180,6 @@
 
 			</fieldset>
 		</form>
-	</div>
 	<br>
 	<br>
 	<br>
@@ -193,5 +187,6 @@
 
 </body>
 	</html>
-
+	
+	
 </c:if>

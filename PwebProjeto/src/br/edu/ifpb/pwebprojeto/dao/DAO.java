@@ -1,4 +1,4 @@
-package br.edu.ifpb.projetopwebii.dao;
+package br.edu.ifpb.pwebprojeto.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
