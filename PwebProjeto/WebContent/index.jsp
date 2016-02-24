@@ -13,7 +13,7 @@
 <script src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js'></script>
 <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='http://fullcalendar.io/js/fullcalendar-2.6.0/fullcalendar.js'></script>
-
+<script src='lang/pt-br.js'></script>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -84,11 +84,8 @@ $(document).ready(function() {
 		
 	</div>
 	<!-- /container -->
-
+<div align="center" id="resultado">${requestScope.resultado }</div><br>
 <div id="calendar"></div>
-<div style="position: absolute; left: 23%;">Legenda:<br>
-Feriado Fixo: Vermelho<br>
-Feriado Substituto: Verde<br>
-Feriado Móvel: Roxo</div>
+<div id="legendas" style="position: absolute; left: 23.98%">Legenda: (Feriado Fixo: <a style="color: #c36969">Vermelho</a> / Feriado Substituto: <a style="color: #69c36f">Verde</a> / Feriado Móvel: <a style="color: #7269c3">Roxo</a>)</div>
 </body>
 </html>

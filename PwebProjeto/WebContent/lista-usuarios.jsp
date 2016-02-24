@@ -116,13 +116,15 @@
      <c:out value="${usuario.getLogin()}" />
     </td>
     <td>
-		<a href="/pwebprojeto/controller.do?op=excluirFeriado" class="btn btn-danger">Excluir</a>
+		<a href="/pwebprojeto/controller.do?op=excluirUsuarioAdm&id=${usuario.getId() }" class="btn btn-danger">Excluir</a>
     </td>
     </tr>
 </c:forEach>
 		</table>
+		
 	</div>
-
+<br><br><br>
+		<div align="center" id="resultado">${requestScope.resultado }</div><br><br>
 </body>
 	</html>
 

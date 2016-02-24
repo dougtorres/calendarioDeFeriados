@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 
 import br.edu.ifpb.pwebprojeto.dao.DAO;
 import br.edu.ifpb.pwebprojeto.dao.FeriadoDAO;
+import br.edu.ifpb.pwebprojeto.dao.NotaDAO;
 import br.edu.ifpb.pwebprojeto.dao.UsuarioDAO;
 import br.edu.ifpb.pwebprojeto.model.Admin;
 import br.edu.ifpb.pwebprojeto.model.Calendario;
@@ -118,6 +120,30 @@ public class ControllerServlet extends HttpServlet {
 			listarUsuarios(request, response);
 			break;
 			
+		case "excluirNota":
+			try {
+				excluirNota(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "excluirUsuario":
+			try {
+				excluirUsuario(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case "excluirUsuarioAdm":
+			try {
+				excluirUsuarioAdm(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		}
 		
 		
@@ -307,8 +333,11 @@ public class ControllerServlet extends HttpServlet {
 	protected void getEventos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ArrayList<Calendario> listaCalendario = new ArrayList<Calendario>();
-
-		int ano = 1990;
+		
+		
+		Calendar cal = Calendar.getInstance();
+		
+		int ano = cal.get(Calendar.YEAR) - 30;
 		List<Feriado> lista;
 		FeriadoDAO dao = new FeriadoDAO();
 		dao.open();
@@ -328,7 +357,7 @@ public class ControllerServlet extends HttpServlet {
 				c.setTipo(f.getTipo());
 				c.setColor(f.getCor());
 				listaCalendario.add(c);
-				for(int i=0; i <= 60; i++){
+				for(int i=0; i <= 70; i++){
 					
 				if(ano != Integer.parseInt(anoSub)){
 				Calendario c2 = new Calendario();
@@ -344,7 +373,7 @@ public class ControllerServlet extends HttpServlet {
 					ano++;
 				}
 				
-			ano = 1990;	
+			ano =  cal.get(Calendar.YEAR) - 30;
 				
 				
 			}if(f.getTipo() == TipoFeriado.Fixo){
@@ -361,7 +390,7 @@ public class ControllerServlet extends HttpServlet {
 				ano++;
 				}
 				
-			ano = 1990;	
+			ano =  cal.get(Calendar.YEAR) - 30;
 			}if(f.getTipo() == TipoFeriado.Movel){
 			
 				Calendario c = new Calendario();
@@ -544,7 +573,6 @@ public class ControllerServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Usuario u = (Usuario) session.getAttribute("usuario");
 		notas = u.getNotas();
-			System.out.println(notas.get(0).getId());
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
@@ -674,5 +702,63 @@ public class ControllerServlet extends HttpServlet {
 		RequestDispatcher d = request.getRequestDispatcher("lista-usuarios.jsp");
 		d.forward(request, response);
 
+	}
+	
+	protected void excluirNota(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		int id = Integer.parseInt(request.getParameter("id"));
+		UsuarioDAO dao = new UsuarioDAO();
+		NotaDAO daoNota = new NotaDAO();
+		u.removerNota(id);
+		dao.open();
+		dao.begin();
+		dao.update(u);
+		dao.commit();
+		dao.close();
+		daoNota.open();
+		daoNota.begin();
+		Nota n = daoNota.read(id);
+		daoNota.delete(n);
+		daoNota.commit();
+		daoNota.close();
+		session.setAttribute("usuario", u);
+		resultado = "Nota Excluida Com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("alterar-nota.jsp").forward(request, response);
+	}
+	
+	protected void excluirUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		HttpSession session = request.getSession();
+		Usuario u = (Usuario) session.getAttribute("usuario");
+		UsuarioDAO dao = new UsuarioDAO();
+		dao.open();
+		dao.begin();
+		dao.delete(u);
+		dao.commit();
+		dao.close();
+		resultado = "Usuário Excluído com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("controller.do?op=logout").forward(request, response);
+	}
+	
+	protected void excluirUsuarioAdm(HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String resultado;
+		
+		UsuarioDAO dao = new UsuarioDAO();
+		dao.open();
+		dao.begin();
+		Usuario u = dao.read(request.getParameter("id"));
+		dao.delete(u);
+		dao.commit();
+		dao.close();
+		resultado = "Usuário Excluído com Sucesso!";
+		request.setAttribute("resultado", resultado);
+		request.getRequestDispatcher("controller.do?op=listarUsuarios").forward(request, response);
 	}
 }

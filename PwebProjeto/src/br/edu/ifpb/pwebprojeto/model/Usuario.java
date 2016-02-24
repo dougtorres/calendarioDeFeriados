@@ -94,15 +94,14 @@ public class Usuario {
 	
 	public void removerNota(int id){
 		
-		Iterator in = (Iterator) this.notas.iterator();
-		
-		while(in.hasNext()){
-			Nota n = (Nota) in.next();
+		for(Nota n : this.notas){
+			
 			if(n.getId() == id){
 				this.notas.remove(n);
 			}
 			
 		}
+
 	}
 
 	public void alterarNota(int id, String descricao, String data) throws ParseException{

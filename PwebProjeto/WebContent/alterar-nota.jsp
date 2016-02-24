@@ -176,7 +176,7 @@
 					<label class="col-md-4 control-label" for=""></label>
 					<div class="col-md-4">
 						<button id="" name="" class="btn btn-inverse">Alterar</button>
-						<a href="/pwebprojeto/controller.do?op=excluirFeriado" class="btn btn-danger">Excluir</a>
+						<a href="/pwebprojeto/controller.do?op=excluirNota&id=${param.id}" class="btn btn-danger">Excluir</a>
 					</div>
 				</div>
 

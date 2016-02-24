@@ -22,6 +22,16 @@ public class UsuarioDAO extends DAO<Usuario>{
 		}
 	}
 	
+	public Nota readNota(int id) throws Exception {
+		try{
+			Query q = manager.createQuery("select n from Nota n where n.id = '"+id+"' ");
+			Nota n  = (Nota) q.getSingleResult();
+			return n;
+		}catch(NoResultException e){
+			return null;
+		}
+	}
+	
 	public Usuario getUsuarioByLogin(String login, String senha){
 		try{
 			Query q = manager.createQuery("select u from Usuario u where u.login = '"+login+"' AND u.senha = '"+senha+"' ");
