@@ -26,7 +26,7 @@ public class Usuario {
 	private boolean admin;
 	@OneToMany(cascade = CascadeType.ALL)
 	 @ElementCollection(targetClass=Nota.class)
-	private List<Nota> notas;
+	private List<Nota> notas = null;
 	
 	
 	public Usuario(){}
@@ -37,6 +37,7 @@ public class Usuario {
 		this.login = login;
 		this.senha = senha;
 		this.admin = false;
+		this.notas = null;
 	}
 
 	public Integer getId() {
@@ -88,7 +89,10 @@ public class Usuario {
 	}
 	
 	public void addNota(String descricao, String data) throws ParseException{
-		Nota n = new Nota(descricao, data);
+		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
+		Date d = sdf1.parse(data);
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+		Nota n = new Nota(descricao, sdf2.format(d));
 		this.notas.add(n);
 	}
 	

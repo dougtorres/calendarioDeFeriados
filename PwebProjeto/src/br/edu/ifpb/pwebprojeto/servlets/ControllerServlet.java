@@ -144,6 +144,14 @@ public class ControllerServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
+		case "adicionarNota":
+			try {
+				adicionarNota(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		}
 		
 		
@@ -269,8 +277,9 @@ public class ControllerServlet extends HttpServlet {
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 		}
 		
-		DAO.open();
 		UsuarioDAO dao = new UsuarioDAO();
+		dao.open();
+		dao.begin();
 		Usuario u = dao.getUsuarioByLogin(login, senha);
 		dao.close();
 		if(u == null){
@@ -537,21 +546,21 @@ public class ControllerServlet extends HttpServlet {
 			throws Exception {
 		String resultado;
 		String descricao = request.getParameter("descricaoNota");
-		String data = request.getParameter("dataNota");
-		SimpleDateFormat sdf1= new SimpleDateFormat("dd/MM/yyyy"); 
-		Date d = sdf1.parse(data);
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+		String dt = request.getParameter("dataNota");
+		System.out.println(request.getParameter("dataNota"));
+		
 		HttpSession session = request.getSession();
-		Usuario aux = (Usuario) session.getAttribute("usuario");
+		Usuario u = (Usuario) session.getAttribute("usuario");
 		UsuarioDAO dao = new UsuarioDAO();
 		dao.open();
 		dao.begin();
-		Usuario u = dao.read(aux.getId());
-		u.addNota(descricao, sdf2.format(d));
-		dao.update(u);
+		Usuario aux = dao.read(u.getId());
+		aux.addNota(descricao, dt);
+		dao.update(aux);
 		dao.commit();
+		dao.refresh(aux);
 		dao.close();
-		session.setAttribute("usuario", u);
+		session.setAttribute("usuario", aux);
 		resultado = "Nota Cadastrada Com Sucesso!";
 		request.setAttribute("resultado", resultado);
 		request.getRequestDispatcher("adicionar-nota.jsp").forward(request, response);
@@ -561,8 +570,8 @@ public class ControllerServlet extends HttpServlet {
 			throws Exception {
 		String data = request.getParameter("data");
 
-
-		request.setAttribute("data", data);
+		
+		request.setAttribute("dt", data);
 		request.getRequestDispatcher("adicionar-nota.jsp").forward(request, response);
 	}
 	
@@ -635,6 +644,7 @@ public class ControllerServlet extends HttpServlet {
 				u.setNotas(notas);
 				dao.update(u);
 				dao.commit();
+				dao.refresh(u);
 				dao.close();
 				resultado = "Nota alterada Com Sucesso!";
 				session.setAttribute("usuario", u);
@@ -680,6 +690,7 @@ public class ControllerServlet extends HttpServlet {
 		dao.begin();
 		dao.update(u);
 		dao.commit();
+		dao.refresh(u);
 		dao.close();
 		String resultado = "Usuário alterado Com Sucesso!";
 		request.setAttribute("resultado", resultado);
@@ -717,6 +728,7 @@ public class ControllerServlet extends HttpServlet {
 		dao.begin();
 		dao.update(u);
 		dao.commit();
+		dao.refresh(u);
 		dao.close();
 		daoNota.open();
 		daoNota.begin();
